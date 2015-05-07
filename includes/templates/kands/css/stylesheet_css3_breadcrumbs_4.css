@@ -1,0 +1,11 @@
+ul#breadcrumbs-four{margin: 0;padding: 0;list-style: none;}
+#breadcrumbs-four{overflow: hidden;width: 120%;}
+#breadcrumbs-four li{float: left;margin: 0 .5em 0 1em;margin-top:5px;font-weight:bold;}
+#breadcrumbs-four li a{margin-top:-5px;font-weight:normal;}
+#breadcrumbs-four a{background: #ddd;padding: .7em 1em;float: left;text-decoration: none;color: #444;text-shadow: 0 1px 0 rgba(255,255,255,.5);-moz-text-shadow: 0 1px 0 rgba(255,255,255,.5);-webkit-text-shadow: 0 1px 0 rgba(255,255,255,.5);position: relative;}
+#breadcrumbs-four a:hover{background: #444;color:#fff;}
+#breadcrumbs-four a::before, #breadcrumbs-four a::after{content:'';position:absolute;top: 0;bottom: 0;width: 1em;background: #ddd;transform: skew(-10deg);-moz-transform: skew(-10deg);-webkit-transform: skew(-10deg);}
+#breadcrumbs-four a::before{left: -.5em;border-radius: 5px 0 0 5px;-moz-border-radius: 5px 0 0 5px;-webkit-border-radius: 5px 0 0 5px;}
+#breadcrumbs-four a:hover::before{background: #444;color:#fff;}
+#breadcrumbs-four a::after{right: -.5em;border-radius: 0 5px 5px 0;-moz-border-radius: 0 5px 5px 0;-webkit-border-radius: 0 5px 5px 0;}
+#breadcrumbs-four a:hover::after{background: #444;color:#fff;}

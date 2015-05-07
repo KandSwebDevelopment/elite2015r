@@ -1,0 +1,30 @@
+#footer {clear:both;margin:0 auto;margin-top:0px;padding-top:10px;padding-bottom:10px;margin-bottom:30px;border-top:1px solid #dbdbce;border-bottom:1px solid #dbdbce;}
+#footer a:hover{color:#444;}
+#navSuppWrapper {margin: 10px 5px 0;padding: 0;background:none;font-weight: bold;}	
+#navSuppWrapper a{color:#444;font-weight:normal;}
+#siteinfoLegal {padding: .5em 0 0;width:100%;line-height:normal;clear:both;color:#a0a0a0;text-align:center;margin-bottom:30px;}
+#siteinfoLegal a {padding: 0 0.5em 0 0.5em;color: #a0a0a0;white-space: nowrap;}
+#siteinfoLegal a:hover {color: #444;}
+.twitter-image {margin-right:10px;}
+#bannerSix {margin-top:0px;margin-bottom:30px;}
+
+#footer-menu{margin-left:5%;}
+#footer-one, #social-media, #footer-three{float:left;width:33%;padding-bottom:30px;}
+#footer-three{padding-left:30px;width:27%;}
+#footer-one, #footer-three{border-right:1px solid #dbdbce;}
+.smi{margin-top:30px;}
+.facebook{margin-left:40px;}
+
+#footer-one ul, #footer-three ul{margin:0;padding:0;list-style: none;color:#a0a0a0;line-height:20px;}
+#footer-one ul{/*margin-left:45px;*/margin-top:20px;}
+#footer-three ul{/*margin-left:45px;*/margin-top:20px;}
+#footer-one li, #footer-three li{margin:0;padding:0;}
+#footer-one li a, #footer-three li a{margin:0;padding-left:2em;display:block;color:#a0a0a0;}
+
+#social-media h2{text-align:center;margin-top:30px;}
+#footer-one h2, #footer-three h2{text-align:left;margin-top:30px;margin-left:10%;}
+
+#footer .heading{text-transform:uppercase;font-size:110%;padding-bottom:25px;padding-top:15px;background: url(../images/title-close.png) no-repeat 15px 50%;border:none;height:12px;padding-left:30px;display:none;}
+#footer .minus{background:url(../images/title-open.png) no-repeat 15px 50%;padding-left:30px;}
+#footer .content1{font-family: verdana, arial, helvetica, sans-serif;line-height:20px;}
+

@@ -63,7 +63,7 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 ?>
 <!--eof Main Product Image-->
 </div>
-<br class="clearBoth">
+
 <div id="p-right">
 <!--bof Product Name-->
 <h1 id="productName" class="productGeneral"><?php echo $products_name; ?></h1>
@@ -174,9 +174,97 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 <hr id="product-divider" />
 
 
+
+
+<link rel="stylesheet" type="text/css" href="<?php $template->get_template_dir('.css',DIR_WS_TEMPLATE, $current_page_base,'css') . '/jquery.bxslider.css'  ?> " />'</link>
+<script src="<?php echo $template->get_template_dir('jquery.bxslider.min.js',DIR_WS_TEMPLATE, $current_page_base,'jscript') . '/jquery.bxslider.min.js' ?>" type="text/javascript"></script>
+<script src="<?php echo $template->get_template_dir('easyResponsiveTabs.js',DIR_WS_TEMPLATE, $current_page_base,'jscript') . '/easyResponsiveTabs.js' ?>" type="text/javascript"></script>
+<script type="text/javascript">
+		$(document).ready(function () {
+				$('#horizontalTab').easyResponsiveTabs({
+						type: 'default', //Types: default, vertical, accordion           
+						width: 'auto', //auto or any width like 600px
+						fit: true,   // 100% fit in a container
+						activate: function(event) { // Callback function if tab is switched
+								var $tab = $(this);
+								var $name = $('span', $info);
+								//$name.text($tab.text());
+								//$info.show();
+						}
+				});
+
+				$('#verticalTab').easyResponsiveTabs({
+						type: 'vertical',
+						width: 'auto',
+						fit: true
+				});
+				$('.familySlider').bxSlider({
+						minSlides: 2,
+						maxSlides: 4,
+						slideWidth: 200,
+						slideMargin: 10,
+						infiniteLoop: false,
+						hideControlOnEnd: true
+				});
+		});
+</script>
+
+
+ <div id="horizontalTab">
+		<ul class="resp-tabs-list">
+				<li>Description</li>
+				<li>Specification</li>
+				<li>Family Items</li>
+				<li>You may also like</li>
+		</ul>
+				
+				
+		<div class="resp-tabs-container">
+		
+				<div>
+						<!--bof Product description -->
+						<?php if ($products_description != '') { ?>
+						<div id="productDescription" class="productGeneral biggerText"><?php echo stripslashes($products_description); ?></div>
+						<?php } 
+						echo '<div id="productDescriptionBS">'. $product_info->fields['bulbs_s1'].'</div>';
+						if(zen_not_null($product_info->fields['info'])&&$product_info->fields['info']!=0){
+								echo'<div id="productDescriptionInfo">'. $product_info->fields['info'].'</div>';
+						}
+						if($product_info->fields['product_nonreturn']==1){
+								echo '<div class="nonreturnPi">'.zen_image('includes/templates/kands/images/non-returnable.jpg','',75).'</div><br class="clearBoth">';
+						}?>
+						<!--eof Product description -->
+				</div>
+				
+				
+				<div>
+						<!--bof Product specs  -->
+						<?php
+							require($template->get_template_dir('/tpl_modules_specification.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_specification.php');
+						?>
+						<!--eof Product specs -->
+				</div>
+						<div>
+								<!-- other page -->
+								<?php
+								/////////////////FAMILY ITEMS
+								require($template->get_template_dir('/tpl_modules_family_items.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_family_items.php');
+								
+								 ?>   
+								<!-- other page -->
+						</div>
+						<div>
+								<!--Custom tab -->
+								Custom tab<br><br><br>
+						</div>
+
+		</div>
+ </div>
+
+
+<!--</div>-->
 <?php
-require($template->get_template_dir('/tpl_modules_product_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_product_tabs.php');
-	//require($template->get_template_dir('/tpl_modules_family_items.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_family_items.php');
+	require($template->get_template_dir('/tpl_modules_family_items.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_family_items.php');
 
 ?>
 
@@ -189,7 +277,7 @@ require($template->get_template_dir('/tpl_modules_product_tabs.php',DIR_WS_TEMPL
 <a class="addthis_button_pinterest_pinit"></a>
 <a class="addthis_counter addthis_pill_style"></a>
 </div>
-<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#"></script>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4ff326d22d3b21a9"></script>
 <!-- AddThis Button END -->
 
 <!--bof Quantity Discounts table -->

@@ -27,9 +27,9 @@
 	define('ENABLE_SSL_CATALOG', 'false');
 
 	define('DIR_WS_ADMIN', preg_replace('#^' . str_replace('-', '\-', zen_parse_url(HTTP_SERVER, '/path')) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-	define('DIR_WS_CATALOG', '/elite2015r/');
+	define('DIR_WS_CATALOG', '/elite2015/');
 	define('DIR_WS_HTTPS_ADMIN', preg_replace('#^' . str_replace('-', '\-', zen_parse_url(HTTPS_SERVER, '/path')) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-	define('DIR_WS_HTTPS_CATALOG', '/elite2015r/');
+	define('DIR_WS_HTTPS_CATALOG', '/elite2015/');
 
 // NOTE: be sure to leave the trailing '/' at the end of these lines if you make changes!
 // * DIR_WS_* = Webserver directories (virtual/URL)
@@ -49,10 +49,10 @@
 // * DIR_FS_* = Filesystem directories (local/physical)
 	define('DIR_FS_ADMIN', preg_replace('#.includes$#', '', realpath(dirname(__FILE__) . '/../') . '/'));
 	//the following path is a COMPLETE path to your Zen Cart files. eg: /var/www/vhost/accountname/public_html/store/
-	define('DIR_FS_CATALOG', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/');
+	define('DIR_FS_CATALOG', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015/');
 
 	//the following path is a COMPLETE path to the /logs/ folder  eg: /var/www/vhost/accountname/public_html/store/logs ... and no trailing slash
-	define('DIR_FS_LOGS', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/logs');
+	define('DIR_FS_LOGS', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015/logs');
 
 	define('DIR_FS_CATALOG_LANGUAGES', DIR_FS_CATALOG . 'includes/languages/');
 	define('DIR_FS_CATALOG_IMAGES', DIR_FS_CATALOG . 'images/');
@@ -68,7 +68,7 @@
 	define('DB_CHARSET', 'utf8');
 	define('DB_SERVER', 'localhost');
 	define('DB_SERVER_USERNAME', 'root');
-	define('DB_SERVER_PASSWORD', '');
+	define('DB_SERVER_PASSWORD', '!1');
 	define('DB_DATABASE', 'elite2015');
 
 	// The next 2 "defines" are for SQL cache support.
@@ -77,7 +77,7 @@
 	// or webserver user has write privileges (chmod 666 or 777). We recommend using the "cache" folder inside the Zen Cart folder
 	// ie: /path/to/your/webspace/public_html/zen/cache   -- leave no trailing slash  
 	define('SQL_CACHE_METHOD', 'database'); 
-	define('DIR_FS_SQL_CACHE', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/cache');
+	define('DIR_FS_SQL_CACHE', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015/cache');
 
 
 // Define the webserver and path parameters

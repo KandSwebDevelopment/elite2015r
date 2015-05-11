@@ -42,12 +42,16 @@ if(!$res->EOF){
 
     $res->fields['products_image'] = get_image_xref($res->fields['products_image']);
 
-    $images_array[] = array('image' => ereg_replace('products/', '', $res->fields['products_image']), 'id'=>$res->fields['products_id'], 'name'=>$res->fields['products_name']);
+    //$images_array[] = array('image' => ereg_replace('products/', '', $res->fields['products_image']), 'id'=>$res->fields['products_id'], 'name'=>$res->fields['products_name']);
+    $images_array[] = array('image' => $res->fields['products_image'], 'id'=>$res->fields['products_id'], 'name'=>$res->fields['products_name']);
     $res->MoveNext();
   }
 }
 
+$title = '';
+return $images_array;
 
+///////////////////////////////////////////////R E M O V E D/////////////////////////////////////////////////////////
 // Build output based on images found
 $num_images = sizeof($images_array);
 $list_box_contents = '';

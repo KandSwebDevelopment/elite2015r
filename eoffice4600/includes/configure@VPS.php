@@ -15,10 +15,10 @@
  * WE RECOMMEND THAT YOU USE SSL PROTECTION FOR YOUR ENTIRE ADMIN:
  * To do that, make sure you use a "https:" URL for BOTH the HTTP_SERVER and HTTPS_SERVER entries:
  */
-	define('HTTP_SERVER', 'http://localhost');
-	define('HTTPS_SERVER', 'https://localhost');
-	define('HTTP_CATALOG_SERVER', 'http://localhost');
-	define('HTTPS_CATALOG_SERVER', 'https://localhost');
+	define('HTTP_SERVER', 'http://h2409559.stratoserver.net');
+	define('HTTPS_SERVER', 'https://h2409559.stratoserver.net');
+	define('HTTP_CATALOG_SERVER', 'http://h2409559.stratoserver.net');
+	define('HTTPS_CATALOG_SERVER', 'https://h2409559.stratoserver.net');
 
 	// secure webserver for admin?  Valid choices are 'true' or 'false' (including quotes).
 	define('ENABLE_SSL_ADMIN', 'false');
@@ -27,9 +27,9 @@
 	define('ENABLE_SSL_CATALOG', 'false');
 
 	define('DIR_WS_ADMIN', preg_replace('#^' . str_replace('-', '\-', zen_parse_url(HTTP_SERVER, '/path')) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-	define('DIR_WS_CATALOG', '/elite2015r/');
+	define('DIR_WS_CATALOG', '/');
 	define('DIR_WS_HTTPS_ADMIN', preg_replace('#^' . str_replace('-', '\-', zen_parse_url(HTTPS_SERVER, '/path')) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-	define('DIR_WS_HTTPS_CATALOG', '/elite2015r/');
+	define('DIR_WS_HTTPS_CATALOG', '/');
 
 // NOTE: be sure to leave the trailing '/' at the end of these lines if you make changes!
 // * DIR_WS_* = Webserver directories (virtual/URL)
@@ -49,10 +49,10 @@
 // * DIR_FS_* = Filesystem directories (local/physical)
 	define('DIR_FS_ADMIN', preg_replace('#.includes$#', '', realpath(dirname(__FILE__) . '/../') . '/'));
 	//the following path is a COMPLETE path to your Zen Cart files. eg: /var/www/vhost/accountname/public_html/store/
-	define('DIR_FS_CATALOG', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/');
+	define('DIR_FS_CATALOG', '/var/www/vhosts/elitelightingni.com/httpdocs/');
 
 	//the following path is a COMPLETE path to the /logs/ folder  eg: /var/www/vhost/accountname/public_html/store/logs ... and no trailing slash
-	define('DIR_FS_LOGS', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/logs');
+	define('DIR_FS_LOGS', '/var/www/vhosts/elitelightingni.com/httpdocs/logs');
 
 	define('DIR_FS_CATALOG_LANGUAGES', DIR_FS_CATALOG . 'includes/languages/');
 	define('DIR_FS_CATALOG_IMAGES', DIR_FS_CATALOG . 'images/');
@@ -67,9 +67,9 @@
 	define('DB_PREFIX', '');
 	define('DB_CHARSET', 'utf8');
 	define('DB_SERVER', 'localhost');
-	define('DB_SERVER_USERNAME', 'root');
-	define('DB_SERVER_PASSWORD', '');
-	define('DB_DATABASE', 'elite2015');
+	define('DB_SERVER_USERNAME', 'elite2015r');
+	define('DB_SERVER_PASSWORD', 'Zvg3s9!1');
+	define('DB_DATABASE', 'elite2015r');
 
 	// The next 2 "defines" are for SQL cache support.
 	// For SQL_CACHE_METHOD, you can select from:  none, database, or file
@@ -77,7 +77,7 @@
 	// or webserver user has write privileges (chmod 666 or 777). We recommend using the "cache" folder inside the Zen Cart folder
 	// ie: /path/to/your/webspace/public_html/zen/cache   -- leave no trailing slash  
 	define('SQL_CACHE_METHOD', 'database'); 
-	define('DIR_FS_SQL_CACHE', 'C:/Users/Steven/Documents/KANDS_HTDOCS/elite2015r/cache');
+	define('DIR_FS_SQL_CACHE', '/var/www/vhosts/elitelightingni.com/httpdocs/cache');
 
 
 // Define the webserver and path parameters

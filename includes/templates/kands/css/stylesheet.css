@@ -1,4 +1,4 @@
-body {margin: 0;background: #ffffff;font-family: 'Source Sans Pro', sans-serif;font-size: 82.5%;color: #444;}
+body {/*margin: 0;*/background: #ffffff;font-family: 'Source Sans Pro', sans-serif;font-size: 82.5%;color: #444;}
 
 /*bof basic elements*/
 a img {border: none;}
@@ -213,11 +213,14 @@ LABEL#textAreaReviews {font-weight:normal;margin: 1em 0;}
 #productsListingBottomNumber {margin-top:15px;margin-bottom:15px;}
 #productListHeading {margin-bottom:15px;}
 .tabTable {border:1px solid #dfdfe7;border-width:0 0 0 0;;}
-.productListing-data {border-bottom:1px solid #dbdbce;padding-top:10px;padding-bottom:10px;}
+.productListing-data {border-bottom:1px solid #dbdbce;padding-top:10px;padding-bottom:10px;padding-right: 0.7%;}
 #gridSorter {background:#e2e3e8;background: -moz-linear-gradient(top, #f8f8f8, #e2e3e8);background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f8f8f8), to(#e2e3e8));background: -o-linear-gradient(top, #f8f8f8, #e2e3e8);margin:10px 0 0 0 ;width:100%;color:#444;text-align:center;text-transform:uppercase;color:#f99d30;font-weight:bold;}
 .centerBoxContentsProducts{text-align:left !important;}
 .more-info{float:left;}
 .more-info a{color:#fff;}
+/*KAS*/
+.product_model{font-size: 110%;}
+#productListing{font-size: 120%;}
 
 /*bof product info*/
 #cartAdd {margin:0;padding:0;text-align:center}
@@ -225,14 +228,14 @@ LABEL#textAreaReviews {font-weight:normal;margin: 1em 0;}
 .navNextPrevWrapper {text-align:center;}
 .navNextPrevCounter {text-align:center;padding-bottom: 9px;}
 #productName {font-weight:normal;font-size:2.0em;}
-#productDetailsList {margin:10px 0 10px 30px;}
+#productDetailsList {margin:0;width: 100%;}
 #attribsOptionsText {font-weight:normal;}
 #productAttributes{margin-top:10px;margin-bottom:10px;}
 .optionName {margin-top:0;} 
 #alsoPurchased {margin-top:20px;}
 #productPrices{text-align:center;}
 #p-left{float:left;margin-right:20px;}
-#p-right{float:left;}
+#p-right{float:left;width: 100%} /*KAS - add width for product info pg*/
 #reviewsWrite .button_reviews{position:relative;top:20px;}
 #reviewsDefault .button_goto_prod_details{position:relative;top:20px;}
 #reviewsInfoDefault .button_goto_prod_details{position:relative;top:20px;}
@@ -266,7 +269,7 @@ LABEL#textAreaReviews {font-weight:normal;margin: 1em 0;}
 .nav li li li a {background:#ccc;z-index:200;border-top: 1px solid #666;color:#444;}
 .nav li li li a:hover{background:#fff;}
 .m-cart{margin-top:15px;text-align:center;}
-.m-home{text-align:right;margin-top:15px;}
+.m-home{text-align:right;margin-top:8px;}
 
 /*bof expandale/contractable*/
 .heading{text-transform:uppercase;font-size:110%;padding-bottom:25px;padding-top:15px;background:url(../images/title-close.png) no-repeat 15px 50%;height:12px;padding-left:30px;color:#a0a0a0;}
@@ -289,10 +292,44 @@ LABEL#textAreaReviews {font-weight:normal;margin: 1em 0;}
 .ie8 .heading{display:none;}
 .ie8 .content{display:block !important;}
 
+
+/* ----- KAS -------- -*/
 /*Technical specs tab*/
+#productDescription_1 ul{margin-left: 4%;}
 .tecSpecBox {text-align:justify;padding:0px 0px 0px 0px;width: 100%;margin: 0px 0px 0px 0px;border-top: 1px solid #c4c8cc;font-size: 110%;}
 .tecSpecHeading, #productRelatedHeading {text-align: center;border: 1px solid #c4c8cc;font-size: 14px;padding: 5px;background-color: #eee;-moz-border-radius: 15px 15px 0px 0px;-webkit-border-radius:  15px 15px 0px 0px;border-radius:  15px 15px 0px 0px;}
 .tecSpec {border: 1px solid #c4c8cc;border-top: none;border-bottom: none;background-color: white;}
 .tecSpecItem {border-bottom: 1px solid #c4c8cc;}
 .tecSpecName {border-right:  1px solid #c4c8cc;float: left;padding: 5px 8px 5px 8px;width: 60%;}
 .tecSpecValue {float: right;text-align: left;padding: 5px 8px 5px 8px;}
+
+#dl-container {width: 100%;max-width: 900px;margin: 0px auto 10px auto;display:none;border-bottom:1px solid #dbdbce;padding-bottom:10px;height:45px}
+
+.defaultCountries{font-size: 1.1em;font-weight: bold;}
+.disabled{}
+#map{min-width: 200px;min-height: 200px;border: 1px solid blue;}
+
+.bfInner{color: blue;-moz-column-count: 3;column-count: 3;-webkit-column-count: 3;text-align: center;}
+.bfInner h3{margin: 0 0 40px 8.5%;width: 80%;padding: 4px;background-color: #ddd;cursor: pointer;}
+.bfImg{margin: 0; /*width: 25%;*/cursor: pointer;}
+#bfFuzz{text-align:left;position: relative;left: 0px;top: -400px;width: 100%;height: 500px;z-index: 20;background-color: rgba(255, 255, 255, 0.7);display: none;}
+.googletour{position: relative;padding-bottom: 56.25%;padding-top: 35px;height: 0;overflow: hidden;}
+.googletour iframe {position: absolute;top:0;left: 0;width: 100%;height: 100%;}
+
+.jobs{width: 97%;border: 1px solid #bbb;padding: 0 0 10px 20px;}
+
+.mapPrint{display: none;padding: 1px;}
+#getDir{margin: 3px;}
+#warnings_panel{padding: 10px;}
+
+ #fuzz{text-align:left;position: absolute;left: 0px;top: 0px;width: 100%;height: 100%;z-index: 20;display: none;background-color: #CCC;background: url('../images/dim.png');}
+.msgbox{position:absolute;width:200px;height:180px;z-index:21;border:2px solid #222;background: #FFF;color: black;top: 50%;left: 65%;margin-top: -100px;margin-left: -150px;text-align: center;vertical-align: middle;-moz-border-radius: 15px;-webkit-border-radius: 15px;border-radius: 15px;-moz-box-shadow: 3px 3px 4px #000;-webkit-box-shadow: 3px 3px 4px #000;box-shadow: 3px 3px 4px #000;}
+
+.tac_popup{position:absolute;z-index:21;border:2px solid #222;background: #FFF;color: black;padding: 8px;height: 350px;width:600px;left:0px;top:0px;text-align: center;vertical-align: middle;-moz-border-radius: 15px;-webkit-border-radius: 15px;border-radius: 15px;-moz-box-shadow: 3px 3px 4px #000;-webkit-box-shadow: 3px 3px 4px #000;box-shadow: 3px 3px 4px #000;}
+.tac_popup_a{padding: 10px;border: 1px solid #000;width: 90px;border-radius:8px;background-color: olive;float: right;margin-right: 100px;cursor: pointer;}
+.tac_popup_d{padding: 10px;border: 1px solid #000;width: 90px;border-radius:8px;background-color: #ccc;margin-left: 100px;cursor: pointer;}
+
+.filterContainer{background-color: #eee;padding: 0.5em 2em 0 1em;}
+#bulbslider{width: 100%;}
+.bulbsliderWraper{padding: 1px;float: right;width: 50%;position:relative;top: -15px;}
+#bulbsliderlable{padding: 2px;position: relative;top: -10px;left: 20%;}

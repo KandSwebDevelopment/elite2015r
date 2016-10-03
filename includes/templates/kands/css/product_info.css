@@ -1,0 +1,20 @@
+@import "tpp/alt_tpp_tabs14.css";
+
+.alignright {
+  display:inline;
+  float:right;
+  margin-bottom:4px;
+  margin-left:10px;
+  overflow:hidden;
+  border: 1px solid black;
+}
+
+.alignleft {
+  display:inline;
+  float:left;
+  margin-bottom:4px;
+  margin-right:10px;
+  overflow:hidden;
+}
+
+.tabcontent .centerBoxHeading{padding: 0;border: none;margin: 10px 0;}

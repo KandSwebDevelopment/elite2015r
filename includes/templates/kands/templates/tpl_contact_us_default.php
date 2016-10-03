@@ -14,7 +14,7 @@
 ?>
 <div class="centerColumn" id="contactUsDefault">
 
-<?php echo zen_draw_form('contact_us', zen_href_link(FILENAME_CONTACT_US, 'action=send', 'SSL')); ?>
+<?php echo zen_draw_form('contact_us', zen_href_link(FILENAME_CONTACT_US, 'action=send', 'SSL'),'post','id="contact_us"'); ?>
 
 <?php if (CONTACT_US_STORE_NAME_ADDRESS== '1') { ?>
 <address><?php echo nl2br(STORE_NAME_ADDRESS); ?></address>
@@ -61,7 +61,7 @@
     }
 ?>
 
-<?php /////////////Product enquiries only section///////////////////////
+<?php //KandS - poduct enquiries only section///////////////////////
 if($product_model){
   ?>
 <label class="inputLabel" for="mId">Product Model</label>
@@ -82,6 +82,7 @@ if($product_model){
 
 <label for="enquiry"><?php echo ENTRY_ENQUIRY . '<span class="alert">' . ENTRY_REQUIRED_SYMBOL . '</span>'; ?></label>
 <?php echo zen_draw_textarea_field('enquiry', '30', '7', $enquiry, 'id="enquiry"'); ?>
+<?php echo recaptcha_get_html($publickey, $resp->error,$request_type == 'SSL'); ?>
 
 <?php echo zen_draw_input_field('should_be_empty', '', ' size="40" id="CUAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
 

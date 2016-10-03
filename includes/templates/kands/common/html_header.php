@@ -28,6 +28,7 @@ require(DIR_WS_MODULES . zen_get_module_directory('meta_tags.php'));
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="author" content="KandS Web Development" />
 <meta name="generator" content="Online showroom" />
+<meta name="google-site-verification" content="Dw1KAbXbIAecpg3KOdVcWMBhRBPtLnG9dE68HPQr8pk" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 

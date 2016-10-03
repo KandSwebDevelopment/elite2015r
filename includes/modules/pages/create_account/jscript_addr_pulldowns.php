@@ -22,6 +22,33 @@ function update_zone(theForm) {
   var SelectedCountry = theForm.zone_country_id.options[theForm.zone_country_id.selectedIndex].value;
   var SelectedZone = theForm.elements["zone_id"].value;
 
+//BOE KandS
+  var NoPostCodeZones = "<?php echo NO_POSTCODE_ZONES; ?> ";
+  if(NoPostCodeZones.indexOf(SelectedCountry)>0){
+    //hide postcode
+    document.getElementById("postcode").value = "NOPOSTCODE";
+    document.getElementById("postcode").className = 'hiddenField';
+    document.getElementById("postcode").setAttribute('className', 'hiddenField');
+    //document.getElementById("pcText").className = 'hiddenField';
+    //document.getElementById("pcText").setAttribute('className', 'hiddenField');
+    document.getElementById("pcAlert").className = 'hiddenField';
+    document.getElementById("pcAlert").setAttribute('className', 'hiddenField');
+    document.getElementById("pcDiv").className = 'hiddenField';
+    document.getElementById("pcDiv").setAttribute('className', 'hiddenField');
+  }else{
+    document.getElementById("postcode").value = "<?php echo $postcode;?>";
+    document.getElementById("postcode").className = 'inputLabel visibleField';
+    document.getElementById("postcode").setAttribute('className', 'inputLabel visibleField');
+    //document.getElementById("pcText").className = 'inputLabel visibleField';
+    //document.getElementById("pcText").setAttribute('className', 'inputLabel visibleField');
+    document.getElementById("pcAlert").className = 'alert visibleField';
+    document.getElementById("pcAlert").setAttribute('className', 'alert visibleField');
+    document.getElementById("pcDiv").className = 'inputLabel';
+    document.getElementById("pcDiv").setAttribute('className', 'inputLabel');
+  }
+ //EOE KandS
+
+
   // reset the array of pulldown options so it can be repopulated
   var NumState = theForm.zone_id.options.length;
   while(NumState > 0) {

@@ -14,6 +14,7 @@
 
 ?>
 
+<script src="<?php echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'jscript') . '/jquery.resmenu.js' ?>" type="text/javascript"></script>
 <script src="<?php echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'jscript') . '/script.js' ?>" type="text/javascript"></script>
 
 
@@ -22,7 +23,7 @@
     <?php echo '<a href="' . HTTP_SERVER . DIR_WS_CATALOG . '">'; ?><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.M_HOME_IMAGE ?>" class="m-home" alt=" m home" /></a>
     <a class="m-cart" href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'); ?>"><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.M_CART_IMAGE ?>" alt="m cart" /></a>
 <ul class="nav">
-    <li><a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'); ?>"><?php echo HEADER_TITLE_CART_CONTENTS; ?> - <? echo $_SESSION['cart']->count_contents();?> <?php echo HEADER_TITLE_CART_ITEMS; ?> - <? echo $currencies->format($_SESSION['cart']->show_total());?></a></li>
+    <li><a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'); ?>"><?php echo HEADER_TITLE_CART_CONTENTS; ?> - <?php echo $_SESSION['cart']->count_contents();?> <?php echo HEADER_TITLE_CART_ITEMS; ?> - <?php echo $currencies->format($_SESSION['cart']->show_total());?></a></li>
      <li><a href="<?php echo zen_href_link(FILENAME_LOGIN, '', 'SSL'); ?>"><?php echo HEADER_TITLE_LOGIN; ?></a></li>
     <li class="test"><a href="#"><?php echo HEADER_TITLE_CATEGORIES; ?></a>
 <?php
@@ -107,7 +108,8 @@ echo $menulist;
     <a href="#">Search</a>
     <ul class="mobile-search">
   <li>
-  <?php require(DIR_WS_MODULES . 'sideboxes/search_header.php'); ?>
+  <?php 
+  require(DIR_WS_MODULES . 'sideboxes/search_header.php'); ?>
     </li></ul>
     </li>
     <li><a href="<?php echo zen_href_link(FILENAME_CONTACT_US, '', 'NONSSL'); ?>"><?php echo BOX_INFORMATION_CONTACT; ?></a></li>

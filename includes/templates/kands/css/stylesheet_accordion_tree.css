@@ -1,0 +1,40 @@
+.js .accordion{visibility:hidden}
+.accordion{padding:0px;font-size:1.2em;}
+.accordion li{list-style-type:none;padding:2px 0px 0px 0px;}
+.accordion li.last-child{list-style-type:none}
+.accordion li.last-child#current{border:1px solid #efefef;background-color:#eee;}
+.lastChild{background-image:none;}
+a.trigger{display:block;padding:0px 0px 8px 10%;background-image:url(../images/arrowRightBlack.png);background-repeat:no-repeat;background-position:0% 30%;font-weight:bold;color:#a0a0a0;}
+.child_1 a.trigger{color:#000;font-weight:100;}
+a.trigger.open{background-image:url(../images/arrowDownBlack.png);font-weight:bold;}
+.last-child a.trigger{padding-left:3%;background-image:none;font-weight:normal}
+ul li a.trigger.open{background-color:#fbfbfb;}
+.child_1{padding:0px 0px 0px 10px;font-size:95%;background-color:#fbfbfb;}
+ul.child_1 li a.trigger.open{background-color:#f2f2f2;}
+.child_2{padding:0px 0px 0px 10px;font-size:90%;background-color:#f2f2f2;}
+ul.child_2 li a.trigger.open{background-color:#e0e0e0;}
+.child_3{padding:0px 0px 0px 10px;font-size:85%;background-color:#e0e0e0;}
+ul.child_3 li a.trigger.open{background-color:#bbb;}
+.child_4{padding:0px 0px 0px 10px;font-size:80%;background-color:#bbb;}
+#current{padding:5px 5px 0px 0px;}
+#current a.trigger.open{background-color:#eee;font-weight:bold;font-size:1.2em;}
+.loading{background-color:rgba(255,255,255,1);position:absolute;top:365px;left:390px;width:200px;height:200px;text-align:center;padding:20px 0px;visibility:hidden;}
+.sm .loading{visibility:visible;}
+.shown{}
+.category_tree a{color:#000;display:block;width:100%;height:100%;outline:none;}
+.level_Rtop{font-size:16px;font-weight:bold;padding-top:4px;padding-right:0px;padding-bottom:4px;padding-left:0px;color:#F00}
+.level_Rtop a{color:#F00;}
+.level_Rlink{font-size:14px;font-weight:normal;padding-top:4px;padding-right:0px;padding-bottom:4px;padding-left:0px;font-size:14px;}
+.linkRootchild{font-size:14px;font-weight:normal;padding-top:4px;padding-right:0px;padding-bottom:10px;padding-left:4px;}
+.linkRootchild0{font-size:14px;font-weight:normal;padding-top:4px;padding-right:0px;padding-bottom:5px;padding-left:7px;}
+.level_divider{width:100%;height:2px;background-color:#333;margin-bottom:8px;margin-top:5px;}
+.linkRootchild:hover, .linkRootchild0:hover{background-color:#eee;}
+.level_Stop{font-size:12px;font-weight:bold;padding:3px 0px 4px 0px;}
+.level_Stop a{font-size:16px;color:#be0000;}
+.level_Stop:hover{background-color:#eee;}
+.level_Stop1{font-size:16px;padding:4px 0px 2px 5px;color:#d70000;background-color:#eefefe;font-weight:bold;}
+.level_Stop2{font-size:16px;padding:4px 0px 5px 5px;color:#d70000;background-color:#eefefe;}
+#nolinkchild{font-size:14px;font-weight:normal;display:block;width:100%;height:100%;outline:none;padding:0px 0px 0px 3px;}
+#linkchild{font-size:14px;font-weight:normal;padding:2px 0px 2px 15px;}
+#linkchild:hover{font-weight:bold;}
+#linkchildselected{font-size:14px;font-weight:normal;padding:2px 0px 2px 20px;background-image:url(../images/bkg_tree_current.jpg);background-repeat:no-repeat;}

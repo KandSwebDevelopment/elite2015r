@@ -11,7 +11,7 @@
  */
 
 $tech_specs = new ProductData;
-
+$result = '';
 $specs_array = $tech_specs->get_product_specs($_GET['products_id']);
 
 if(sizeof($specs_array)> 0) {
@@ -19,28 +19,26 @@ if(sizeof($specs_array)> 0) {
       //Reorder the specs
       $specs_array = $tech_specs->reOrder($specs_array);
     }
-    ?>
-    <div class="tecSpecBox">
-        <!--<div id="tecSpecHeading">Technical Specifications</div>-->
-        <div class="tecSpec">
-            <?php
+    $result = '<div class="tecSpecBox">';
+        //<!--<div id="tecSpecHeading">Technical Specifications</div>-->
+        $result .= '<div class="tecSpec">';
             //items not to be displayed
             //$skip_array = array('products_id', 'manufactures_code');
 
             if(is_array($specs_array)){
               foreach($specs_array as $key => $value){
-                echo '<div class="tecSpecItem">';
-                echo '<div class="tecSpecName">';
-                echo $key;
-                echo '</div><div class="tecSpecValue">';
-                echo $value;
-                echo '</div>';
-                echo '<br class="clearBoth" />';
-                echo '</div>';
+                $result .= '<div class="tecSpecItem">';
+                $result .= '<div class="tecSpecName">';
+                $result .= $key;
+                $result .= '</div><div class="tecSpecValue">';
+                $result .= $value;
+                $result .= '</div>';
+                $result .= '<br class="clearBoth" />';
+                $result .= '</div>';
               }
             }
-            ?>
-            <!--<div id="tecSpecItem"><br />&nbsp;<br /></div>-->
-        </div>
-    </div>
-<?php } ?>
+            
+            //<!--<div id="tecSpecItem"><br />&nbsp;<br /></div>-->
+        $result .='</div>';
+    $result .='</div>';
+} ?>

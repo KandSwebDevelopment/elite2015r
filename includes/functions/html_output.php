@@ -511,7 +511,10 @@
     if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name]) ) $default = stripslashes($GLOBALS[$name]);
 
     for ($i=0, $n=sizeof($values); $i<$n; $i++) {
-      $field .= '  <option value="' . zen_output_string($values[$i]['id']) . '"';
+      //KandS BOF - Dropdown styling
+      //$field .= '  <option value="' . zen_output_string($values[$i]['id']) . '"';
+      $field .= '  <option'.(isset($values[$i]['class'])?' class="'.$values[$i]['class'].'" ':'').(isset($values[$i]['disable'])?'disabled':'').' value="' . zen_output_string($values[$i]['id']) . '"';
+      //KandS EOF - Dropdown styling
       if ($default == $values[$i]['id']) {
         $field .= ' selected="selected"';
       }
@@ -539,12 +542,18 @@
     // IF YOU WANT TO ADD MORE DEFAULTS TO THE TOP OF THIS LIST, SIMPLY ENTER THEIR NUMBERS HERE.
     // Duplicate more lines as needed
     // Example: Canada is 108, so use 108 as shown:
-    //$countriesAtTopOfList[] = 108;
+    //$countriesAtTopOfList[] = 300;
+    $countriesAtTopOfList[] = 103;
+    $countriesAtTopOfList[] = 222;
 
     //process array of top-of-list entries:
+    $countries_array[] = array('id' => '', 'text' => '--------------------------------', 'class'=>'', 'disable'=>'disabled');
     foreach ($countriesAtTopOfList as $key=>$val) {
-      $countries_array[] = array('id' => $val, 'text' => zen_get_country_name($val));
+      //KandS BOF - Dropdown styling of default contries
+      //$countries_array[] = array('id' => $val, 'text' => zen_get_country_name($val));
+      $countries_array[] = array('id' => $val, 'text' => zen_get_country_name($val), 'class'=>'defaultCountries');
     }
+    $countries_array[] = array('id' => '', 'text' => '--------------------------------', 'class'=>'', 'disable'=>'disabled');
     // now add anything not in the defaults list:
     for ($i=0, $n=sizeof($countries); $i<$n; $i++) {
       $alreadyInList = FALSE;

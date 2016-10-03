@@ -9,3 +9,4 @@ ul#breadcrumbs-four{margin: 0;padding: 0;list-style: none;}
 #breadcrumbs-four a:hover::before{background: #444;color:#fff;}
 #breadcrumbs-four a::after{right: -.5em;border-radius: 0 5px 5px 0;-moz-border-radius: 0 5px 5px 0;-webkit-border-radius: 0 5px 5px 0;}
 #breadcrumbs-four a:hover::after{background: #444;color:#fff;}
+.breadcrumbLast{margin-top: 11px!important;font-size: 1.2em;}

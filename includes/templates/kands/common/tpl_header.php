@@ -19,15 +19,15 @@
 ?>
 
 <?php
-  // Display all header alerts via messageStack:
-  if ($messageStack->size('header') > 0) {
-    echo $messageStack->output('header');
-  }
-  if (isset($_GET['error_message']) && zen_not_null($_GET['error_message'])) {
-  echo htmlspecialchars(urldecode($_GET['error_message']));
-  }
-  if (isset($_GET['info_message']) && zen_not_null($_GET['info_message'])) {
-   echo htmlspecialchars($_GET['info_message']);
+	// Display all header alerts via messageStack:
+	if ($messageStack->size('header') > 0) {
+		echo $messageStack->output('header');
+	}
+	if (isset($_GET['error_message']) && zen_not_null($_GET['error_message'])) {
+	echo htmlspecialchars(urldecode($_GET['error_message']));
+	}
+	if (isset($_GET['info_message']) && zen_not_null($_GET['info_message'])) {
+	 echo htmlspecialchars($_GET['info_message']);
 } else {
 
 }
@@ -44,27 +44,27 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 
 <!--bof-branding display-->
 <div id="logoWrapper">
-    <div id="logo"><?php echo '<a href="' . HTTP_SERVER . DIR_WS_CATALOG . '">' . zen_image($template->get_template_dir(HEADER_LOGO_IMAGE, DIR_WS_TEMPLATE, $current_page_base,'images'). '/' . HEADER_LOGO_IMAGE, HEADER_ALT_TEXT) . '</a>'; ?>
+		<div id="logo"><?php echo '<a href="' . HTTP_SERVER . DIR_WS_CATALOG . '">' . zen_image($template->get_template_dir(HEADER_LOGO_IMAGE, DIR_WS_TEMPLATE, $current_page_base,'images'). '/' . HEADER_LOGO_IMAGE, HEADER_ALT_TEXT) . '</a>'; ?>
 <?php if (HEADER_SALES_TEXT != '' || (SHOW_BANNERS_GROUP_SET2 != '' && $banner = zen_banner_exists('dynamic', SHOW_BANNERS_GROUP_SET2))) { ?>
-    <div id="taglineWrapper">
+		<div id="taglineWrapper">
 <?php
-              if (HEADER_SALES_TEXT != '') {
+							if (HEADER_SALES_TEXT != '') {
 ?>
-      <div id="tagline"><?php echo HEADER_SALES_TEXT;?></div></div>
+			<div id="tagline"><?php echo HEADER_SALES_TEXT;?></div></div>
 <br class="clearBoth" />
 <?php
-              }
+							}
 ?>
 <?php
-              if (SHOW_BANNERS_GROUP_SET2 != '' && $banner = zen_banner_exists('dynamic', SHOW_BANNERS_GROUP_SET2)) {
-                if ($banner->RecordCount() > 0) {
+							if (SHOW_BANNERS_GROUP_SET2 != '' && $banner = zen_banner_exists('dynamic', SHOW_BANNERS_GROUP_SET2)) {
+								if ($banner->RecordCount() > 0) {
 ?>
-      <div id="bannerTwo" class="banners"><?php echo zen_display_banner('static', $banner);?></div>
+			<div id="bannerTwo" class="banners"><?php echo zen_display_banner('static', $banner);?></div>
 <?php
-                }
-              }
+								}
+							}
 ?>
-    </div>
+		</div>
 
 <?php } // no HEADER_SALES_TEXT or SHOW_BANNERS_GROUP_SET2 ?>
 
@@ -79,20 +79,20 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 <!--bof-navigation display-->
 <div id="navMainWrapper">
 <div id="navMain">
-    <ul class="back">
-    <!--<li><?php echo '<a href="' . HTTP_SERVER . DIR_WS_CATALOG . '">'; ?><?php echo HEADER_TITLE_CATALOG; ?></a></li>-->
+		<ul class="back">
+		<!--<li><?php echo '<a href="' . HTTP_SERVER . DIR_WS_CATALOG . '">'; ?><?php echo HEADER_TITLE_CATALOG; ?></a></li>-->
 <?php if ($_SESSION['customer_id']) { ?>
-    <li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_LOGOFF ?>" alt="logoff icon" class="logoff-icon"  /><a href="<?php echo zen_href_link(FILENAME_LOGOFF, '', 'SSL'); ?>"><?php echo HEADER_TITLE_LOGOFF; ?></a></li>
-    <li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_MYACCOUNT ?>" alt="my account icon" class="myaccount-icon"  /><a href="<?php echo zen_href_link(FILENAME_ACCOUNT, '', 'SSL'); ?>"><?php echo HEADER_TITLE_MY_ACCOUNT; ?></a></li>
+		<li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_LOGOFF ?>" alt="logoff icon" class="logoff-icon"  /><a href="<?php echo zen_href_link(FILENAME_LOGOFF, '', 'SSL'); ?>"><?php echo HEADER_TITLE_LOGOFF; ?></a></li>
+		<li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_MYACCOUNT ?>" alt="my account icon" class="myaccount-icon"  /><a href="<?php echo zen_href_link(FILENAME_ACCOUNT, '', 'SSL'); ?>"><?php echo HEADER_TITLE_MY_ACCOUNT; ?></a></li>
 <?php
-      } else {
-        if (STORE_STATUS == '0') {
+			} else {
+				if (STORE_STATUS == '0') {
 ?>
-    <li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_LOGIN ?>" alt="login icon" class="login-icon"  /><a href="<?php echo zen_href_link(FILENAME_LOGIN, '', 'SSL'); ?>"><?php echo HEADER_TITLE_LOGIN; ?></a></li>
+		<li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_LOGIN ?>" alt="login icon" class="login-icon"  /><a href="<?php echo zen_href_link(FILENAME_LOGIN, '', 'SSL'); ?>"><?php echo HEADER_TITLE_LOGIN; ?></a></li>
 <?php } } ?>
-    <li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_CART ?>" alt="cart icon" class="cart-icon"  /><a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'); ?>"><?php echo $_SESSION['cart']->count_contents();?> <?php echo HEADER_TITLE_CART_ITEMS; ?> - <?php echo $currencies->format($_SESSION['cart']->show_total());?></a></li>
-    <li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_CHECK ?>" alt="checkout icon" class="checkout-icon"  /><a href="<?php echo zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL'); ?>"><?php echo HEADER_TITLE_CHECKOUT; ?></a></li>
-<?php if ($_SESSION['cart']->count_contents() != 0) { ?>
+		<!--<li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_CART ?>" alt="cart icon" class="cart-icon"  /><a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'); ?>"><?php echo $_SESSION['cart']->count_contents();?> <?php echo HEADER_TITLE_CART_ITEMS; ?> - <?php echo $currencies->format($_SESSION['cart']->show_total());?></a></li>
+		<li><img src="<?php  echo $template->get_template_dir('',DIR_WS_TEMPLATE, $current_page_base,'images').'/'.HEADER_ICON_CHECK ?>" alt="checkout icon" class="checkout-icon"  /><a href="<?php echo zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL'); ?>"><?php echo HEADER_TITLE_CHECKOUT; ?></a></li>
+--><?php if ($_SESSION['cart']->count_contents() != 0) { ?>
 <?php }?>
 </ul>
 <br class="clearBoth" />
@@ -111,7 +111,7 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 
 
 <!--bof-optional categories tabs navigation display-->
-<?php require($template->get_template_dir('tpl_modules_categories_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_categories_tabs.php'); ?>
+<?php //require($template->get_template_dir('tpl_modules_categories_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_categories_tabs.php'); ?>
 <!--eof-optional categories tabs navigation display-->
 
 <!--bof-header ezpage links-->
@@ -121,10 +121,11 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 <!--eof-header ezpage links-->
 </div>
 
-<br class="clearBoth" />
+<!--<br class="clearBoth" />-->
 
 <!--bof-mega menu display-->
-   <?php require($template->get_template_dir('tpl_mega_menu.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_mega_menu.php');?>
+	 <?php //require($template->get_template_dir('tpl_mega_menu.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_mega_menu.php');?>
+	 <?php require($template->get_template_dir('tpl_resMenu.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_resMenu.php');?>
 <!--eof-mega menu display-->
 <div class="clearBoth"></div>
 
@@ -133,7 +134,8 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 <div class="clearBoth"></div>
 
 <!--bof handheld menu display-->
-<?php require($template->get_template_dir('tpl_modules_mobile_categories_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_mobile_categories_tabs.php'); ?>
+<?php //require($template->get_template_dir('tpl_modules_mobile_categories_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_mobile_categories_tabs.php'); ?>
+<?php require($template->get_template_dir('tpl_modules_mobile_menu.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_mobile_menu.php'); ?>
 <!--eof handheld menu display-->
 <div class="clearBoth"></div>
 
@@ -141,17 +143,17 @@ if (!isset($flag_disable_header) || !$flag_disable_header) {
 
 
 <?php
-    if ($this_is_home_page) {
+		if ($this_is_home_page) {
 ?>
  <?php
 if (CAR_SLIDES_STATUS == 'true') {
 ?>
-	  <?php require($template->get_template_dir('tpl_home_slider.php',DIR_WS_TEMPLATE, $current_page_base,'common')
+		<?php require($template->get_template_dir('tpl_home_slider.php',DIR_WS_TEMPLATE, $current_page_base,'common')
 			. '/tpl_home_slider.php');?>
 <?php
-    } ?>
+		} ?>
 <?php
-    } ?>
+		} ?>
 
 
 

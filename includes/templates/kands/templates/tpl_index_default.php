@@ -16,28 +16,42 @@
 <div class="centerColumn" id="indexDefault">
 <h1 id="indexDefaultHeading"><?php echo HEADING_TITLE; ?></h1>
 
-<?php if (SHOW_CUSTOMER_GREETING == 1) { ?>
-<h2 class="greeting"><?php echo zen_customer_greeting(); ?></h2>
-<?php } ?>
 
-<!-- deprecated - to use uncomment this section
-<?php if (TEXT_MAIN) { ?>
-<div id="" class="content"><?php echo TEXT_MAIN; ?></div>
-<?php } ?>-->
+<!-- Sale banner -->
+<style type="text/css">
 
-<!-- deprecated - to use uncomment this section
-<?php if (TEXT_INFORMATION) { ?>
-<div id="" class="content"><?php echo TEXT_INFORMATION; ?></div>
-<?php } ?>-->
+</style>
+
+<div style="background-color: #eee; padding: 8px;">
+We currently have a vacancy for an Electrican/Handyman. An application form can be collected instore or 
+<span class="cssButton1"><a href="media/form1eh.pdf" download="">Download it here!</a></span>
+
+</div>
+<!--
+<div style="padding-left:25% ;" ><img src="images/banners/Easter2016F.jpg" border="0" alt="" width="70%"></div>
+
+<br>
+<div ><a href="https://selfbuild.ticketbud.com/belfast2016?pc=ELITE" target="_blank"><img src="images/banners/Self-build-16a.png" border="0" alt="" width="950px"></a></div>
+-->
+
+<?php
+    //echo $_SERVER['DOCUMENT_ROOT'];
+?>
+
+
 
 <?php if (DEFINE_MAIN_PAGE_STATUS >= 1 and DEFINE_MAIN_PAGE_STATUS <= 2) { ?>
 <?php
-/**
- * get the Define Main Page Text
- */
+
 ?>
 <div id="indexDefaultMainContent"><?php require($define_page); ?></div>
 <?php } ?>
+
+
+<div>
+....
+</div>
+
 
 <?php
   $show_display_category = $db->Execute(SQL_SHOW_PRODUCT_INFO_MAIN);

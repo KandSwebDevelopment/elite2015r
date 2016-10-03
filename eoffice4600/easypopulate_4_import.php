@@ -53,6 +53,8 @@ if ( isset($_GET['import']) ) {
 	$default_these[] = 'v_metatags_price_status';
 	$default_these[] = 'v_metatags_title_tagline_status';
 
+  $xsell_master_array = array();
+  
 	$file_location = DIR_FS_CATALOG.$tempdir.$file['name'];
 	// Error Checking
 	if (!file_exists($file_location)) {
@@ -62,7 +64,7 @@ if ( isset($_GET['import']) ) {
 	}
 	
 	// Read Column Headers
-	if ($raw_headers = fgetcsv($handle, 0, $csv_delimiter, $csv_enclosure)) {
+	if ($raw_headers = @fgetcsv($handle, 0, $csv_delimiter, $csv_enclosure)) {
 /*		$header_search = array("ARTIST","TITLE","FORMAT","LABEL",
 			"CATALOG_NUMBER","UPC","PRICE","RETAIL",
 			"WHOLESALE",	"GENRE","RELEASE_DATE","EXCLUSIVE",
@@ -259,6 +261,14 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 			
 		} // End data checking
 
+        //**************************************************************************
+        //*************** DEAL WITH MULIPLE CATEGORIES******************************
+        //**************************************************************************
+        $additional_categories = explode('*', $items[$filelayout['v_categories_name_1']]);
+        $items[$filelayout['v_categories_name_1']] = $additional_categories[0];
+
+
+
 		// Assign new values, i.e. $v_products_model = new import value over writing existing data pulled above
 		// This loop goes through all the fields in the import file and sets each corresponding variable.
 		// Variables not set here are either set in the loop above for existing product records
@@ -382,6 +392,13 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 			$v_products_image = PRODUCTS_IMAGE_NO_IMAGE;
 		}
 
+        // check size of $v_products_image
+        if (mb_strlen($v_products_image) > $products_image_max_len) {
+            $display_output .= sprintf(EASYPOPULATE_4_DISPLAY_RESULT_PRODUCTS_IMAGE_LONG, $v_products_model, $products_model_max_len);
+            $ep_error_count++;
+            //continue; // short-circuit on error
+        }
+        
 		// check size of v_products_model, loop on error
 		if (mb_strlen($v_products_model) > $products_model_max_len) {
 			$display_output .= sprintf(EASYPOPULATE_4_DISPLAY_RESULT_PRODUCTS_MODEL_LONG, $v_products_model, $products_model_max_len);
@@ -460,15 +477,80 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
         if($v_products_weight==''||!zen_not_null($v_products_weight))$v_products_weight=0;
         if($v_box_quantity==''||!zen_not_null($v_box_quantity))$v_box_quantity=0;
         if($v_products_image=='')$v_products_image=PRODUCTS_IMAGE_NO_IMAGE;
+        
+		
+////////////////////////////////////////////////////////////////////////////////    
+// BEGIN: CATEGORIES2 ==========================================================
 
-		
-		
+        $categories_name_exists = false; // assume no column defined
+        foreach ($langcode as $key => $lang) {
+            // test column headers for each language
+            if (zen_not_null(trim($items[$filelayout['v_categories_name_'.$lang['id']]])) ) { // import column found
+                $categories_name_exists = true; // at least one language column defined
+            }
+            }
+        if ($categories_name_exists) { // we have at least 1 language column
+            // chadd - 12-14-2010 - $categories_names_array[] has our category names
+            $categories_delimiter = "*"; // add this to configuration variables
+            // get all defined categories
+            foreach ($langcode as $key => $lang) {
+                // iso-8859-1
+                // $categories_names_array[$lang['id']] = explode($categories_delimiter,$items[$filelayout['v_categories_name_'.$lang['id']]]); 
+                // utf-8 
+                $categories_names_array[$lang['id']] = mb_split('\x2A',$items[$filelayout['v_categories_name_'.$lang['id']]]); 
+            
+                // get the number of tokens in $categories_names_array[]
+                $categories_count[$lang['id']] = count($categories_names_array[$lang['id']]);
+
+            } // foreach
+        }
+        // start with first defined language... (does not have to be 1)
+        $lid = $langcode[1]['id'];    
+        $v_categories_name_var = 'v_categories_name_'.$lid; // $$v_categories_name_var >> $v_categories_name_1, $v_categories_name_2, etc.
+        if (isset($$v_categories_name_var)) { // does column header exist?
+            // start from the highest possible category and work our way down from the parent
+            $v_categories_id = 0;
+            //$theparent_id = 0; // 0 is top level parent
+            // $categories_delimiter = "^"; // add this to configuration variables
+            for ( $category_index=0; $category_index<$categories_count[$lid]; $category_index++ ) {
+                $thiscategoryname = ep_4_curly_quotes($categories_names_array[$lid][$category_index]); // category name - 5-3-2012 added curly quote fix
+                $sql = "SELECT categories_id FROM ".TABLE_CATEGORIES." WHERE categories_id = $thiscategoryname LIMIT 1";
+                    $result = ep_4_query($sql);
+                $row = ($ep_uses_mysqli ? mysqli_fetch_array($result) : mysql_fetch_array($result));
+                if ( $row != '' ) { // category exists
+                    $v_categories_id = $thiscategoryname;
+                    //==================================================================================================================================
+                    // Assign product to category 
+                    //$result_incategory = ep_4_query('SELECT
+//                        '.TABLE_PRODUCTS_TO_CATEGORIES.'.products_id,
+//                        '.TABLE_PRODUCTS_TO_CATEGORIES.'.categories_id
+//                        FROM
+//                        '.TABLE_PRODUCTS_TO_CATEGORIES.'
+//                        WHERE
+//                        '.TABLE_PRODUCTS_TO_CATEGORIES.'.products_id='.$v_products_id.' AND
+//                        '.TABLE_PRODUCTS_TO_CATEGORIES.'.categories_id='.$v_categories_id);
+//                        if (($ep_uses_mysqli ? mysqli_num_rows($result_incategory) : mysql_num_rows($result_incategory)) == 0) { // nope, this is a new category for this product
+//                            $res1 = ep_4_query('INSERT INTO '.TABLE_PRODUCTS_TO_CATEGORIES.' (products_id, categories_id)
+//                                VALUES ("'.$v_products_id.'", "'.$v_categories_id.'")');
+//                            if ($res1) {
+//                              zen_record_admin_activity('Product ' . (int)$v_products_id . ' copied as link to category ' . (int)$v_categories_id . ' via EP4.', 'info');
+//                            }
+//                        } else { // already in this category, nothing to do!
+//                        }
+                    //==================================================================================================================================
+                } else { // otherwise add new category
+                    // get next available categoies_id
+                    $display_output .= "<br>Error: Category ".$thiscategoryname." undefined for item: ".$items[0];
+                }
+            } // ( $category_index=0; $category_index<$catego.....
+        } // (isset($$v_categories_name_var))
+// END: CATEGORIES2 ===============================================================================================           		
 		
 		// insert new, or update existing, product
-		if ($v_products_model != "") { // products_model exists!
-			// First we check to see if this is a product in the current db.
-			$result = ep_4_query("SELECT products_id FROM ".TABLE_PRODUCTS." WHERE (products_model = '".addslashes($v_products_model)."') LIMIT 1");
-					if (($ep_uses_mysqli ? mysqli_num_rows($result) : mysql_num_rows($result)) == 0)  { // new item, insert into products
+if ($v_products_model != "") { // products_model exists!
+	// First we check to see if this is a product in the current db.
+	$result = ep_4_query("SELECT products_id FROM ".TABLE_PRODUCTS." WHERE (products_model = '".addslashes($v_products_model)."') LIMIT 1");
+			if (($ep_uses_mysqli ? mysqli_num_rows($result) : mysql_num_rows($result)) == 0)  { // new item, insert into products
 				$v_date_added	= ($v_date_added == 'NULL') ? CURRENT_TIMESTAMP : $v_date_added;
 				$sql			= "SHOW TABLE STATUS LIKE '".TABLE_PRODUCTS."'";
 				$result			= ep_4_query($sql);
@@ -558,6 +640,7 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 					products_last_modified			= CURRENT_TIMESTAMP,
 					products_quantity				= '".$v_products_quantity."',
 					manufacturers_id				= '".$v_manufacturers_id."',
+                    master_categories_id            = '".$v_categories_id."',
 					products_status					= '".$v_db_status."',
 					metatags_title_status			= '".$v_metatags_title_status."',
 					metatags_products_name_status	= '".$v_metatags_products_name_status."',
@@ -584,73 +667,21 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 				}
 			}
 
-            
-////////////////////////////////////////////////////////////////////////////////    
-// BEGIN: CATEGORIES2 ==========================================================
+            if (isset($v_categories_id)){
+                //delete all entries in the products to categories table for the product id
+                $sql = "delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " where products_id = '" . $v_products_id . "'";
+                ep_4_query($sql);
+                $display_output .= 'In categories ';
 
-        $categories_name_exists = false; // assume no column defined
-        foreach ($langcode as $key => $lang) {
-            // test column headers for each language
-            if (zen_not_null(trim($items[$filelayout['v_categories_name_'.$lang['id']]])) ) { // import column found
-                $categories_name_exists = true; // at least one language column defined
+                foreach($additional_categories as $key => $value){
+                    if($value!=""){
+                        $res1 = ep_4_query('INSERT INTO '.TABLE_PRODUCTS_TO_CATEGORIES.' (products_id, categories_id) VALUES ("' . $v_products_id . '", "' . $value . '")');
+                        $display_output .= ', '. $value;
+                    }
+                }
             }
-			}
-        if ($categories_name_exists) { // we have at least 1 language column
-            // chadd - 12-14-2010 - $categories_names_array[] has our category names
-            $categories_delimiter = "*"; // add this to configuration variables
-            // get all defined categories
-            foreach ($langcode as $key => $lang) {
-                // iso-8859-1
-                // $categories_names_array[$lang['id']] = explode($categories_delimiter,$items[$filelayout['v_categories_name_'.$lang['id']]]); 
-                // utf-8 
-                $categories_names_array[$lang['id']] = mb_split('\x2A',$items[$filelayout['v_categories_name_'.$lang['id']]]); 
-			
-                // get the number of tokens in $categories_names_array[]
-                $categories_count[$lang['id']] = count($categories_names_array[$lang['id']]);
-
-            } // foreach
-        }
-        // start with first defined language... (does not have to be 1)
-        $lid = $langcode[1]['id'];    
-        $v_categories_name_var = 'v_categories_name_'.$lid; // $$v_categories_name_var >> $v_categories_name_1, $v_categories_name_2, etc.
-        if (isset($$v_categories_name_var)) { // does column header exist?
-            // start from the highest possible category and work our way down from the parent
-            $v_categories_id = 0;
-            //$theparent_id = 0; // 0 is top level parent
-            // $categories_delimiter = "^"; // add this to configuration variables
-            for ( $category_index=0; $category_index<$categories_count[$lid]; $category_index++ ) {
-                $thiscategoryname = ep_4_curly_quotes($categories_names_array[$lid][$category_index]); // category name - 5-3-2012 added curly quote fix
-                $sql = "SELECT categories_id FROM ".TABLE_CATEGORIES." WHERE categories_id = $thiscategoryname LIMIT 1";
-					$result = ep_4_query($sql);
-                $row = ($ep_uses_mysqli ? mysqli_fetch_array($result) : mysql_fetch_array($result));
-                if ( $row != '' ) { // category exists
-                    $v_categories_id = $thiscategoryname;
-                    //==================================================================================================================================
-                    // Assign product to category 
-                        $result_incategory = ep_4_query('SELECT
-                            '.TABLE_PRODUCTS_TO_CATEGORIES.'.products_id,
-                            '.TABLE_PRODUCTS_TO_CATEGORIES.'.categories_id
-                            FROM
-                            '.TABLE_PRODUCTS_TO_CATEGORIES.'
-                            WHERE
-                            '.TABLE_PRODUCTS_TO_CATEGORIES.'.products_id='.$v_products_id.' AND
-                            '.TABLE_PRODUCTS_TO_CATEGORIES.'.categories_id='.$v_categories_id);
-                            if (($ep_uses_mysqli ? mysqli_num_rows($result_incategory) : mysql_num_rows($result_incategory)) == 0) { // nope, this is a new category for this product
-                            $res1 = ep_4_query('INSERT INTO '.TABLE_PRODUCTS_TO_CATEGORIES.' (products_id, categories_id)
-                                VALUES ("'.$v_products_id.'", "'.$v_categories_id.'")');
-                            if ($res1) {
-                              zen_record_admin_activity('Product ' . (int)$v_products_id . ' copied as link to category ' . (int)$v_categories_id . ' via EP4.', 'info');
-                            }
-                        } else { // already in this category, nothing to do!
-					}
-                    //==================================================================================================================================
-                } else { // otherwise add new category
-                    // get next available categoies_id
-                    $display_output .= "<br>Error: Category ".$thiscategoryname." undefined for item: ".$items[0];
-				}
-            } // ( $category_index=0; $category_index<$catego.....
-        } // (isset($$v_categories_name_var))
-// END: CATEGORIES2 ===============================================================================================                
+            
+     
 		
             ////////////////////////////////////////////////////////////////////////////
             //                                                                        //
@@ -676,7 +707,8 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
             product_statements, product_tilt, product_variant, product_priority,
             family_caption, now_price, show_price, rrp, rate_1, rate_2, rate_3, bulbs_s1,
              info, web_price, multi_quantity, multi_price, lumens, colour_temp,
-             energy_class, cri, hours, sale_price, trade_multi_price, trade_multi_quantity
+             energy_class, cri, hours, sale_price, trade_multi_price, trade_multi_quantity,
+             bulb_finish, bulb_shape, bulb_dimmable
              ) VALUES (
               '".zen_db_input($v_products_id)."',
               '".zen_db_input($v_manufactures_code)."',
@@ -732,7 +764,10 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
               '".zen_db_input($v_hours)."',
               '".zen_db_input($v_sale_price)."',
               '".zen_db_input($v_trade_multi_price)."',
-              '".zen_db_input($v_trade_multi_quantity)."'
+              '".zen_db_input($v_trade_multi_quantity)."',
+              '".zen_db_input($v_bulb_finish)."',
+              '".zen_db_input($v_bulb_shape)."',
+              '".zen_db_input($v_bulb_dimmable)."'
               )";
               //insert extra fields
               $result = ep_4_query($e_query);
@@ -743,61 +778,64 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 
             if($v_now_price=='')$v_now_price=NULL;
             $e_query = 'UPDATE product_extra_fields SET '.
-              'manufactures_code ="'. zen_db_input($v_manufactures_code) . '"' .
-              ', product_style ="' . zen_db_input($v_product_style) . '"' .
-              ', product_finish ="' . zen_db_input($v_product_finish) . '"' .
-              ', product_material ="' . zen_db_input($v_product_material) . '"' .
-              ', product_colour ="' . zen_db_input($v_product_colour) . '"' .
-              ', bulbs_qty ="' . zen_db_input($v_bulbs_qty) . '"' .
-              ', bulbs_watts ="' . zen_db_input($v_bulbs_watage)  . '"' .
-              ', bulbs_type ="' . zen_db_input($v_bulb_type) . '"' .
-              ', bulbs_cap ="' . zen_db_input($v_bulb_cap) . '"' .
-              ', bulbs_included ="' . zen_db_input($v_bulbs_inc) . '"' .
-              ', dimensions_height ="' . zen_db_input($v_dimensions_height) . '"' .
-              ', dimensions_width ="' . zen_db_input($v_dimensions_width) . '"' .
-              ', dimensions_depth ="' . zen_db_input($v_dimensions_depth) . '"' .
-              ', product_dia ="' . zen_db_input($v_product_dia) . '"' .
-              ', product_min_drop ="' . zen_db_input($v_product_min_drop) . '"' .
-              ', product_max_drop ="' . zen_db_input($v_product_max_drop) . '"' .
-              ', product_length ="' . zen_db_input($v_product_length) . '"' .
-              ', product_recess ="' . zen_db_input($v_product_recess) . '"' .
-              ', product_nonreturn ="' . zen_db_input($v_product_nonreturnable) . '"' .
-              ', ip_rating ="' . zen_db_input($v_ip_rating) . '"' .
-              ', product_voltage ="' . zen_db_input($v_product_voltage) . '"' .
-              ', product_guarantee ="' . zen_db_input($v_product_guarantee)  . '"' .
-              ', product_options ="' . zen_db_input($v_product_materials) . '"' .
+              'manufactures_code ="'.     zen_db_input($v_manufactures_code) . '"' .
+              ', product_style ="' .      zen_db_input($v_product_style) . '"' .
+              ', product_finish ="' .     zen_db_input($v_product_finish) . '"' .
+              ', product_material ="' .   zen_db_input($v_product_material) . '"' .
+              ', product_colour ="' .     zen_db_input($v_product_colour) . '"' .
+              ', bulbs_qty ="' .          zen_db_input($v_bulbs_qty) . '"' .
+              ', bulbs_watts ="' .        zen_db_input($v_bulbs_watage)  . '"' .
+              ', bulbs_type ="' .         zen_db_input($v_bulb_type) . '"' .
+              ', bulbs_cap ="' .          zen_db_input($v_bulb_cap) . '"' .
+              ', bulbs_included ="' .     zen_db_input($v_bulbs_inc) . '"' .
+              ', dimensions_height ="' .  zen_db_input($v_dimensions_height) . '"' .
+              ', dimensions_width ="' .   zen_db_input($v_dimensions_width) . '"' .
+              ', dimensions_depth ="' .   zen_db_input($v_dimensions_depth) . '"' .
+              ', product_dia ="' .        zen_db_input($v_product_dia) . '"' .
+              ', product_min_drop ="' .   zen_db_input($v_product_min_drop) . '"' .
+              ', product_max_drop ="' .   zen_db_input($v_product_max_drop) . '"' .
+              ', product_length ="' .     zen_db_input($v_product_length) . '"' .
+              ', product_recess ="' .     zen_db_input($v_product_recess) . '"' .
+              ', product_nonreturn ="' .  zen_db_input($v_product_nonreturnable) . '"' .
+              ', ip_rating ="' .          zen_db_input($v_ip_rating) . '"' .
+              ', product_voltage ="' .    zen_db_input($v_product_voltage) . '"' .
+              ', product_guarantee ="' .  zen_db_input($v_product_guarantee)  . '"' .
+              ', product_options ="' .    zen_db_input($v_product_materials) . '"' .
               ', product_safety_class ="' . zen_db_input($v_product_saftey_class) . '"' .
               ', product_transformer ="' . zen_db_input($v_product_transformer) . '"' .
-              ', product_driver ="' . zen_db_input($v_product_driver) . '"' .
-              ', product_cut_out ="' . zen_db_input($v_product_cut_out) . '"' .
+              ', product_driver ="' .     zen_db_input($v_product_driver) . '"' .
+              ', product_cut_out ="' .    zen_db_input($v_product_cut_out) . '"' .
               ', product_surface_temp ="' . zen_db_input($v_product_surface_temp) . '"' .
-              ', product_cable ="' . zen_db_input($v_product_cable) . '"' .
-              ', product_tilt ="' . zen_db_input($v_product_tilt) . '"' .
-              ', product_variant ="' . zen_db_input($v_product_variant) . '"' .
-              ', product_priority ="' . zen_db_input($v_priortity) . '"' .
-              ', family_caption ="' . zen_db_input($v_family_caption) . '"' .
-              ', now_price ="' . zen_db_input($v_now_price) . '"' .
-              ', product_options ="' . zen_db_input($v_product_options) . '"' .
-              ', product_carriage ="' . zen_db_input($v_product_carrage) . '"' .
+              ', product_cable ="' .      zen_db_input($v_product_cable) . '"' .
+              ', product_tilt ="' .       zen_db_input($v_product_tilt) . '"' .
+              ', product_variant ="' .    zen_db_input($v_product_variant) . '"' .
+              ', product_priority ="' .   zen_db_input($v_priortity) . '"' .
+              ', family_caption ="' .     zen_db_input($v_family_caption) . '"' .
+              ', now_price ="' .          zen_db_input($v_now_price) . '"' .
+              ', product_options ="' .    zen_db_input($v_product_options) . '"' .
+              ', product_carriage ="' .   zen_db_input($v_product_carrage) . '"' .
               ', product_statements ="' . zen_db_input($v_product_statements) . '"' .
-              ', show_price ="' . zen_db_input($v_show_price) . '"' .
-              ', rrp ="' . zen_db_input($v_rrp) . '"' .
-              ', rate_1 ="' . zen_db_input($v_rate_1) . '"' .
-              ', rate_2 ="' . zen_db_input($v_rate_2) . '"' .
-              ', rate_3 ="' . zen_db_input($v_rate_3) . '"' .
-              ', bulbs_s1 ="' . zen_db_input($v_bulbs_s1) . '"' .
-              ', info ="' . zen_db_input($v_info) . '"' .
-              ', web_price ="' . zen_db_input($v_web_price) . '"' .
-              ', multi_quantity ="' . zen_db_input($v_multi_quantity) . '"' .
-              ', multi_price ="' . zen_db_input($v_multi_price) . '"' .
-              ', lumens ="' . zen_db_input($v_lumens) . '"' .
-              ', colour_temp ="' . zen_db_input($v_colour_temp) . '"' .
-              ', energy_class ="' . zen_db_input($v_energy_class) . '"' .
-              ', cri ="' . zen_db_input($v_cri) . '"' .
-              ', hours ="' . zen_db_input($v_hours) . '"' .
-              ', sale_price ="' . zen_db_input($v_sale_price) . '"'.
-              ', trade_multi_price ="' . zen_db_input($v_trade_multi_price) . '"'.
-              ', trade_multi_quantity ="' . zen_db_input($v_trade_multi_quantity) . '"
+              ', show_price ="' .         zen_db_input($v_show_price) . '"' .
+              ', rrp ="' .                zen_db_input($v_rrp) . '"' .
+              ', rate_1 ="' .             zen_db_input($v_rate_1) . '"' .
+              ', rate_2 ="' .             zen_db_input($v_rate_2) . '"' .
+              ', rate_3 ="' .             zen_db_input($v_rate_3) . '"' .
+              ', bulbs_s1 ="' .           zen_db_input($v_bulbs_s1) . '"' .
+              ', info ="' .               zen_db_input($v_info) . '"' .
+              ', web_price ="' .          zen_db_input($v_web_price) . '"' .
+              ', multi_quantity ="' .     zen_db_input($v_multi_quantity) . '"' .
+              ', multi_price ="' .        zen_db_input($v_multi_price) . '"' .
+              ', lumens ="' .             zen_db_input($v_lumens) . '"' .
+              ', colour_temp ="' .        zen_db_input($v_colour_temp) . '"' .
+              ', energy_class ="' .       zen_db_input($v_energy_class) . '"' .
+              ', cri ="' .                zen_db_input($v_cri) . '"' .
+              ', hours ="' .              zen_db_input($v_hours) . '"' .
+              ', sale_price ="' .         zen_db_input($v_sale_price) . '"'.
+              ', trade_multi_price ="' .  zen_db_input($v_trade_multi_price) . '"'.
+              ', trade_multi_quantity ="'.zen_db_input($v_trade_multi_quantity) . '"'.
+              ', bulb_finish ="' .        zen_db_input($v_bulb_finish) . '"'.
+              ', bulb_shape ="' .         zen_db_input($v_bulb_shape) . '"'.
+              ', bulb_dimmable ="' .      zen_db_input($v_bulb_dimmable) . '"
                 WHERE
                   (products_id = "'. $v_products_id . '")';
 
@@ -915,10 +953,10 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 						expires_date				= '".$v_specials_expires_date."',
 						status						= '1'
 						WHERE products_id			= '".(int)$v_products_id."'";
-						$result = ep_4_query($sql);
-            if ($result) {
-              zen_record_admin_activity('Updated special ' . (int)$v_products_id . ' via EP4.', 'info');
-            }
+					$result = ep_4_query($sql);
+          if ($result) {
+            zen_record_admin_activity('Updated special ' . (int)$v_products_id . ' via EP4.', 'info');
+          }
 					$specials_print .= sprintf(EASYPOPULATE_4_SPECIALS_UPDATE, $v_products_model, substr(strip_tags($v_products_name[$epdlanguage_id]), 0, 10), $v_products_price , $v_specials_price);
 				} // we still have our special here
 			} // end specials for this product
@@ -928,6 +966,15 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 			// better yet, why not ONLY call if pricing was updated
 			// ALL these affect pricing: products_tax_class_id, products_price, products_priced_by_attribute, product_is_free, product_is_call
 			zen_update_products_price_sorter($v_products_id);
+      
+      /////////////////////////////////////////////////////////////////////////////////////
+      ////                                                                               //
+      ////    Cross Sell - Store values for processing after the file loop has finished  //
+      /////////////////////////////////////////////////////////////////////////////////////
+      if($v_xsell != ''){                                                          //
+        $xsell_master_array[$v_products_model]=zen_db_prepare_input($v_xsell);     //
+      }                                                                            //
+      ///////////////////////////////////////////////////////////////////////////////
 			
 		} else {
 			// this record is missing the product_model
@@ -937,7 +984,141 @@ if ( ( strtolower(substr($file['name'],0,15)) <> "categorymeta-ep") && ( strtolo
 				$display_output .= print_el_4($summary);
 			}
 		} // end of row insertion code
-	} // end of Mail While Loop
+	} // end of Main While Loop
+  
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////    Cross Sell - process                                                      ////
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    //Delete any entries in xsell table for all items
+    //  ob_implicit_flush(true);
+    // ob_end_flush();
+    foreach($xsell_master_array as $xOrgModel => $xvalues){
+      $values = NULL;
+      //echo 'D Loop'.$xOrgModel.'-----'.$xvalues.'<br />';
+      $xvalues_array = explode(';',$xvalues);
+      foreach($xvalues_array as $key => $xvalue){
+        if(strpos($xvalue, '*')>0){
+          ///wildcard in family code, look up family items and insert them all
+          $c_xvalue = trim($xvalue, '*');
+          $rs_family = $db->Execute("SELECT products_model FROM " . TABLE_PRODUCTS . " WHERE products_model LIKE '" . $c_xvalue . "%'");
+          while(!$rs_family->EOF){
+            $values[] = $rs_family->fields['products_model'];
+            $rs_family->MoveNext();
+          }
+        }else{
+          //No wildcard so just use the value as given
+          $values[] = $xvalue;
+        }
+      }
+      //Get the pID for the base model
+      $xpid = ep_pID_mID($xOrgModel);
+      if(is_array($values)){
+        foreach($values as $value){
+          //Get the pID for the item to xsell with base NOTE here $mId is not model id but product id
+          $mId = ep_pID_mID($value);
+    //echo 'Del Loop -'.$value.'<br />';
+    //echo '.';
+          //Check product to xsell with exists
+          if($mId != NULL){
+            //Query db to see if an entry for this xsell exists in the xsell table
+            $result = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_XSELL . " WHERE (products_id = $xpid AND xsell_id = $mId) OR (products_id = $mId AND xsell_id = $xpid)");
+            //$row =  mysql_fetch_array($result);
+            if(!$result->EOF){
+              //xsell exists in table so delete it
+              $sql = "DELETE FROM " . TABLE_PRODUCTS_XSELL . " WHERE (products_id = $xpid  AND xsell_id = $mId )OR (products_id = $mId AND xsell_id = $xpid)";
+    //echo 'Deleting - '.$sql.'<br />';
+    //echo '.';
+              $db->Execute($sql);
+            }
+          }
+        }
+      }
+    }//end Delete
+  //echo '<br />';
+    //Now insert xsell values
+    ob_implicit_flush(true);
+    ob_end_flush();
+
+    foreach($xsell_master_array as $xOrgModel => $xvalues){
+      $values = NULL;
+      //Get the pID for the base model
+      $xpid = ep_pID_mID($xOrgModel);
+      //Put list of xsell values into array
+      //echo 'D Loop'.$xOrgModel.'-----'.$xvalues.'<br />';
+      $xsell_array = explode(';', $xvalues);
+      foreach($xsell_array as $value){
+        $one_way = false;
+        $values = array();
+        //Check for one way indicator
+        if(strpos($value, '!')>0){
+          $one_way = true;
+          $value = trim($value, '!');
+        }
+        if(strpos($value, '*')>0){
+          ///wildcard in family code, look up family items and insert them all
+          $value = trim($value, '*');
+          $rs_family = $db->Execute("SELECT products_model FROM " . TABLE_PRODUCTS . " WHERE products_model LIKE '" . $value . "%'");
+          while(!$rs_family->EOF){
+            $values[] = $rs_family->fields['products_model'];
+            $rs_family->MoveNext();
+          }
+          if(sizeof($values)==0){
+            //No family found
+             $display_output .= "|<span style='color:Red'><b> xsell fail No family $value found</b></span>";
+          }
+        }else{
+          //No wildcard so just use the value as given
+          $values[] = $value;
+        }
+        //Now loop through all the values, if it is not xselling to a family this will be only 1 item
+        foreach($values as $value){
+          //Get the pID for the item to xsell with base NOTE here $mId is not model id but product id
+          $mId = ep_pID_mID($value);
+          //echo 'Add '.$value .'('.$mId.') with '.$xOrgModel.'('.$xpid.')<br />';
+          //echo '.';
+          //Avoid xselling the base item with itself
+          if($v_products_id == $mId)continue;
+          //Check product to xsell with exists
+          if($mId != NULL){
+            //Check to ensure item has not already been added in this run
+            $result = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_XSELL . " WHERE (products_id = $xpid AND xsell_id = $mId)");
+            if($result->EOF){
+               //Add xsell
+               $sql_1 = "INSERT INTO " . TABLE_PRODUCTS_XSELL . " (products_id, xsell_id, sort_order) VALUES ($xpid, $mId, 1)";
+              //echo $sql_1.'<br />';
+              //echo '.';
+              $db->Execute($sql_1);
+              $xsup = 1;
+              $display_output .= "$xOrgModel xsell with $value<br/>";
+            }
+            //If xsell is two way
+            if(!$one_way){
+              //Check to ensure item has not already been added in this run
+              $result = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_XSELL . " WHERE (products_id = $mId AND xsell_id = $xpid)");
+              if($result->EOF){
+                  //Add xsell
+                  $sql_2 = "INSERT INTO " . TABLE_PRODUCTS_XSELL . " (products_id, xsell_id, sort_order) VALUES ($mId, $xpid, 1)";
+                  //echo $sql_2.'<br />';
+                  //echo '.';
+                  $db->Execute($sql_2);
+                  $xsup++;
+                  $display_output .= "$value xsell with $xOrgModel<br/>";
+              }
+            }
+          }else{
+            //No xsell item to add base item to
+            $display_output .= "<span style='color:Red'><b>$xOrgModel xsell fail No product $value </b></span><br/>";
+          }
+        }//end foreach($values as $value)
+        $display_output .="-------------------------<br/>";
+      }//eol foreach($xsell_array as $value)
+
+    }/////////////////////////////////////////////////////////////////////////
+    ///////////////////////// eof xsell  /////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+            
+
 	} // conditional IF statement
 	
 	$display_output .= '<h3>Finished Processing Import File</h3>';

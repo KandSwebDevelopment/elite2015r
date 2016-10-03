@@ -13,10 +13,36 @@
  */
  //require(DIR_WS_MODULES . '/debug_blocks/product_info_prices.php');
 ?>
-
-
-
-
+<script src="<?php echo $template->get_template_dir('jquery.bxslider.min.js',DIR_WS_TEMPLATE, $current_page_base,'jscript') . '/jquery.bxslider.min.js' ?>" type="text/javascript"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            var familySlider = $('.familySlider').bxSlider({
+                minSlides: 1,
+                maxSlides: 4,
+                slideWidth: 150,
+                slideMargin: 10,
+                moveSlides: 1,
+                infiniteLoop: false,
+                hideControlOnEnd: true,
+                adaptiveHeight: true
+            });
+            var familySlider = $('.relatedSlider').bxSlider({
+                minSlides: 1,
+                maxSlides: 4,
+                slideWidth: 150,
+                slideMargin: 10,
+                moveSlides: 1,
+                infiniteLoop: false,
+                hideControlOnEnd: true,
+                adaptiveHeight: true
+            });
+        });
+</script>
+<?php 
+//BOF :: Tabbed Products Pro ::
+require(DIR_WS_MODULES . 'tabbed_products_pro.php');
+//EOF :: Tabbed Products Pro ::
+?>
 <div class="centerColumn" id="productGeneral">
 
 <!--bof Form start-->
@@ -171,11 +197,15 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 <!---->
 </div>
 <br class="clearBoth" /> 
-<hr id="product-divider" />
-
+<!--<hr id="product-divider" />-->
 
 <?php
-require($template->get_template_dir('/tpl_modules_product_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_product_tabs.php');
+//BOF :: Tabbed Products Pro ::
+echo '<div id="tpptabBlock" style="display:none;">' . $tabData . '</div>';
+//EOF :: Tabbed Products Pro ::
+?>
+<?php
+//require($template->get_template_dir('/tpl_modules_product_tabs.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_product_tabs.php');
 	//require($template->get_template_dir('/tpl_modules_family_items.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_family_items.php');
 
 ?>
@@ -290,3 +320,8 @@ require($template->get_template_dir('/tpl_modules_product_tabs.php',DIR_WS_TEMPL
 </form>
 <!--bof Form close-->
 </div>
+<?php
+//BOF :: Tabbed Products Pro ::
+echo $tabjscript;
+//BOF :: Tabbed Products Pro ::
+?>

@@ -1,19 +1,16 @@
-.image_carousel {position: relative;padding: 0 0 0 0;width: 98%;background-size:100%;margin-bottom:30px;}
-.image_carousel .panel {background:transparent;padding: 0px;margin: 0px;display: block;float: left;text-align: center;width: 200px;}
-a#foo2_prev, a#foo2_next,a#foo1_prev, a#foo1_next {background: url(../images/carousel_nav.gif) no-repeat transparent;width: 24px;height: 35px;display: block;position: absolute;top: -60px;}
-a#foo2_prev,a#foo1_prev {left: 90%; background-position: 0 0;}
-a#foo2_prev:hover,a#foo1_prev:hover {background-position: 0 -36px;}
-a#foo2_next,a#foo1_next{right: 10px;background-position: -23px 0;}
-a#foo2_next:hover,a#foo1_next:hover {background-position: -23px -36px;}
-a.prev span, a.next span {display: none;}
+.image_carousel{position:relative;padding:0 0 0 0;width:98%;background-size:100%;margin-bottom:30px;}
+.image_carousel .panel{background:transparent;padding:0px;margin:0px;display:block;float:left;text-align:center;width:200px;}
+a#foo2_prev, a#foo2_next,a#foo1_prev, a#foo1_next{background:url(../images/carousel_nav.gif) no-repeat transparent;width:24px;height:35px;display:block;position:absolute;top:-60px;}
+a#foo2_prev,a#foo1_prev{left:90%;background-position:0 0;}
+a#foo2_prev:hover,a#foo1_prev:hover{background-position:0 -36px;}
+a#foo2_next,a#foo1_next{right:10px;background-position:-23px 0;}
+a#foo2_next:hover,a#foo1_next:hover{background-position:-23px -36px;}
+a.prev span, a.next span{display:none;}
 .carouselImage{text-align:left !important;min-height:200px;}
 .carouselTitle{width:85%;margin:0 auto;margin-top:20px;text-align:left!important;min-height:45px;}
 .carouselDescription{}
-.carouselPrice{width:85%;margin:0 auto;margin-bottom: 20px;text-align:left !important;min-height:20px;}
+.carouselPrice{width:85%;margin:0 auto;margin-bottom:20px;text-align:left !important;min-height:20px;}
 .carouselBuyNow{text-align:left!important;width:85%;margin:0 auto;}
 .more-info{float:left;}
-
-@media (max-width:767px){
-a#foo2_prev,a#foo1_prev {left: 80%;}
-
+@media (max-width:767px){a#foo2_prev,a#foo1_prev{left:80%;}
 }

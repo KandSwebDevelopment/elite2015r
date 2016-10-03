@@ -8,7 +8,7 @@
 						fit: true,   // 100% fit in a container
 						activate: function(events) { // Callback function if tab is switched
 								familySlider.reloadSlider();
-								event.stopPropagtion();
+								//event.stopPropagtion();
 						}
 				});
 

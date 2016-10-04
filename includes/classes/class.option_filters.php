@@ -7,6 +7,8 @@ define('STYLE', 'Style');
 define('COLOUR', 'Colour');
 define('FINISH', 'Finish');
 define('MATERIAL', 'Material');
+define('BULB_QTY_MIN', 'BulbQtyMin');
+define('BULB_QTY_MAX', 'BulbQtyMax');
 
 class OptionFilter {
 	var $options_filter_array = NULL;//array of all available options
@@ -51,6 +53,8 @@ class OptionFilter {
 //					}
 //					$output .= '<input type="checkbox" name="option_' . $for_option . '" id="' . $for_option .'"  value="' . $value . '" '. $checked . $jscode .' />' . array_search($value,$this->options_filter_array[$for_option]) . '<br />';
 }
+		}else{
+			$output=null;
 		}
 
 		return $checked;
@@ -154,8 +158,11 @@ class OptionFilter {
 		if(isset($_GET['f2v'])&&($_GET['f2v']>0)){
 			$this->active_filters['Colour'] = explode(',',$_GET['f2v']);
 		}
-		if(isset($_GET['f3'])&&($_GET['f3']>0)){
-			$this->active_filters['Size'] = explode(',',$_GET['f3']);
+		if(isset($_GET['bmin'])&&($_GET['bmin']>0)){
+			$this->active_filters[BULB_QTY_MIN] = $_GET['bmin'];
+		}
+		if(isset($_GET['bmax'])&&(($_GET['bmax']>0)||($_GET['bmax']=="All"))){
+			$this->active_filters[BULB_QTY_MAX] = $_GET['bmax'];
 		}
 //		if(isset($_GET['f4'])&&($_GET['f4']!=-1)){
 //			$this->active_filters['Material'] = explode(',',$_GET['f4']);
@@ -201,7 +208,11 @@ class OptionFilter {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function get_colour_string(){
 		$x = $this->get_filter_options_on(COLOUR);
-		return implode(',',$x);
+		if(is_array($x)){
+			return implode(',',$x);
+		}else{
+			return '';
+		}
 	}
 	
 	

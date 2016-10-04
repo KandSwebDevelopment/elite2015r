@@ -20,9 +20,15 @@ if($current_category_id > 0){
 	$sub_cats = implode(',',$sub_cats_array);
 	$category_depth = 'products';
 	$_SESSION['filter_category'] =$current_category_id;
-	if($current_category_id < 3){
-		$_SESSION['department'] = $current_category_id;
+	$pc = zen_get_generated_category_path_rev($current_category_id);
+	if(is_array($pc)){
+		$t = $pc[0][sizeof($pc)-1]['id'];
+	}else{
+		$t=$pc;
 	}
+	//if($current_category_id < 3){
+		$_SESSION['department'] = $t; //$current_category_id;
+	//}
 	if($sub_cats!=''){
 		$category_depth = 'nested';
 	}

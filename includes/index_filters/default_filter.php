@@ -133,10 +133,14 @@ $listing_sql ="SELECT " . $select_column_list . "
 						 $listing_sql .= " AND pef.product_material IN($filter) ";
 					 }
 
-					 $f_string = $_SESSION['OptionFilter']->get_filter_options_on('Finish');
-					 if(sizeof($f_string)>0){
-						 $filter = implode(',',$f_string);
-						 $listing_sql .= " AND pef.product_finish IN($filter) ";
+					 $f_string = $_SESSION['OptionFilter']->get_filter_options_on(BULB_QTY_MIN);
+					 if($f_string>0){
+						 $listing_sql .= " AND pef.bulbs_qty >= '$f_string' ";
+					 }
+
+					 $f_string = $_SESSION['OptionFilter']->get_filter_options_on(BULB_QTY_MAX);
+					 if($f_string>0){
+						 $listing_sql .= " AND pef.bulbs_qty <= '$f_string' ";
 					 }
 
 				 }

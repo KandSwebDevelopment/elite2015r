@@ -14,7 +14,7 @@
 					?>
 				</li>
 				<li>
-						<a href="<?php echo zen_href_link(FILENAME_DEFAULT, 'cPath=2');?>">Furniture</a>
+						<a href="<?php echo zen_href_link(FILENAME_DEFAULT, 'cPath=2');?>">Interiors</a>
 						<?php
 					 $menulist = $CategoriesUL->buildBranch(2,true,'cPath=2_');
 					 echo $menulist;
